@@ -31,20 +31,20 @@ before(function (done) {
 
 /* test cases */
 
-describe('letsface api', function (done) {
-  var req = {
-    weixin: {
-      MsgType: 'text',
-      Content: 'clubs'
-    }
-  };
-  var res = {
-    reply: function (result) {
-      expect(result).to.equal('1 clubs');
-      done();
-    }
-  };
-  it('should reply club list', function () {
+describe('letsface api', function () {
+  it('should reply club list', function (done) {
+    var req = {
+      weixin: {
+        MsgType: 'text',
+        Content: 'clubs'
+      }
+    };
+    var res = {
+      reply: function (result) {
+        expect(result).to.equal('1 clubs');
+        done();
+      }
+    };
     bot(req, res);
   });
 });
