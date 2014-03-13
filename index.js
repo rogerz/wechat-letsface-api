@@ -31,8 +31,7 @@ exports.clubs = function clubs(options) {
           return next(err);
         } else {
           debug('Get %d clubs', body.length);
-          res.reply(body.length + ' clubs');
-          return next();
+          return res.reply(body.length + ' clubs');
         }
       });
     } else {
