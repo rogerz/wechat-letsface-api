@@ -20,8 +20,8 @@ exports.options = {
 };
 
 /* list clubs */
-exports.clubs = function clubs(options) {
-  return function clubs(req, res, next) {
+exports.clubs = function createClubs(options) {
+  function clubs(req, res, next) {
     var msg = req.weixin;
     if (msg.MsgType === 'text' && msg.Content.toLowerCase() === 'clubs') {
       request({
@@ -39,16 +39,18 @@ exports.clubs = function clubs(options) {
     } else {
       return next();
     }
-  };
+  }
+  clubs.help = "clubs";
+  return clubs;
 };
 
 var wechat = require('wechat');
 var util = require('util');
 
 /* check in using wechat profile */
-exports.checkIn = function checkIn(options) {
+exports.checkIn = function createCheckIn(options) {
   var wxApi = options.wxApi;
-  return function checkIn(req, res, next) {
+  function checkIn(req, res, next) {
     var msg = req.weixin;
 
     if (msg.MsgType !== 'text') return next();
@@ -76,9 +78,9 @@ exports.checkIn = function checkIn(options) {
       });
       var form = r.form();
       form.append('name', result.nickname);
-      form.append('email', 'fake@email.com');
-      form.append('mobile', '10086');
       form.append('photo', request(result.headimgurl));
     });
-  };
+  }
+  checkIn.help = "check in <club_id> <event_id>";
+  return checkIn;
 };
