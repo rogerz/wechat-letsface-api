@@ -5,13 +5,15 @@ var expect = chai.expect;
 var server = require('./server');
 var lfApi = server.createServer();
 
-var clubs = [
-  {
-    id: '205',
-    name: 'SURTEX',
-    logo: 'http://121.199.38.39/hphoto/logoclub/NewClub.jpgw76_h76.jpg'
-  }
-];
+var clubs = {
+  clubs: [
+    {
+      id: '205',
+      name: 'SURTEX',
+      logo: 'http://121.199.38.39/hphoto/logoclub/NewClub.jpgw76_h76.jpg'
+    }
+  ]
+};
 
 var responses = {
   'clubs/': server.createResponse(JSON.stringify(clubs), 'application/json'),

@@ -31,8 +31,9 @@ exports.clubs = function clubs(options) {
         if (err) {
           return next(err);
         } else {
-          debug('get %d clubs', body.length);
-          return res.reply(body.length + ' clubs');
+          var total = body.clubs.length;
+          debug('get %d clubs', total);
+          return res.reply(total + ' clubs');
         }
       });
     } else {
@@ -66,11 +67,12 @@ exports.checkIn = function checkIn(options) {
       var r = request({
         uri: util.format('%s/club/%s/event/%s/checkin',
                          options.lfApi, club, event),
-        json: true
+        json: true,
+        method: 'POST'
       }, function checkedIn(err, httpResponse, body) {
         if (err) return next(err);
         debug('check in result: %s, msg: %s', body.result, body.msg);
-        res.reply('check in ' + body.result);
+        return res.reply('check in ' + body.result);
       });
       var form = r.form();
       form.append('name', result.nickname);
