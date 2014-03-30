@@ -24,7 +24,8 @@
     "wechat-bot": "0.0.1",
     "request": "^2.34.0",
     "debug": "^0.7.4",
-    "lodash": "^2.4.1"
+    "lodash": "^2.4.1",
+    "wechat": "^0.6.7"
   },
   "devDependencies": {
     "chai": "~1.8.1",

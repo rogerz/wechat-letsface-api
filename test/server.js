@@ -10,12 +10,12 @@ exports.createServer = function createServer(port) {
   return s;
 };
 
-exports.createGetResponse = function createGetResponse(text, contentType) {
-  function getResponse(req, res) {
+exports.createResponse = function createResponse(text, contentType) {
+  function response(req, res) {
     contentType = contentType || 'text/plain';
     res.writeHead(200, {'content-type': contentType});
     res.write(text);
     res.end();
   }
-  return getResponse;
+  return response;
 };

@@ -1,10 +1,9 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-/* fake api server */
+/* fake letsface api server */
 var server = require('./server');
-
-var api = server.createServer();
+var lfApi = server.createServer();
 
 var clubs = [
   {
@@ -15,15 +14,33 @@ var clubs = [
 ];
 
 var responses = {
-  'clubs/': server.createGetResponse(JSON.stringify(clubs), 'application/json')
+  'clubs/': server.createResponse(JSON.stringify(clubs), 'application/json'),
+  'club/1/event/2/checkin': server.createResponse(
+    JSON.stringify({result: 'ok', msg: '...'}),
+    'application/json'
+  )
 };
 
-var bot = require('..')({url: api.url});
+var wxApi = {
+  getUser: function getUser(user, fn) {
+   return fn(null, {
+     openid: 'fake_open_id',
+     nickname: 'fake_name',
+     // TODO: fake image
+     headimgurl: 'http://localhost:' + lfApi.port + '/clubs/'
+   });
+  }
+};
+
+var bot = require('..')({
+  url: lfApi.url,
+  wxApi: wxApi
+});
 
 before(function (done) {
-  api.listen(api.port, function () {
+  lfApi.listen(lfApi.port, function () {
     for (var route in responses) {
-      api.on('/' + route, responses[route]);
+      lfApi.on('/' + route, responses[route]);
     }
     done();
   });
@@ -40,8 +57,23 @@ describe('letsface api', function () {
       }
     };
     var res = {
-      reply: function (result) {
+      reply: function reply(result) {
         expect(result).to.equal('1 clubs');
+        done();
+      }
+    };
+    bot(req, res);
+  });
+  it('should checkin with wechat profile', function (done) {
+    var req = {
+      weixin: {
+        MsgType: 'text',
+        Content: 'checkin 1 2'
+      }
+    };
+    var res = {
+      reply: function reply(result) {
+        expect(result).to.equal('checkin ok');
         done();
       }
     };
