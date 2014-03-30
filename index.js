@@ -15,7 +15,9 @@ exports = module.exports = function wechatLetsfaceApi(options) {
 };
 
 /* global options for all instance */
-exports.options = {url: 'http://localhost:3000'};
+exports.options = {
+  lfApi: 'http://localhost:3000'
+};
 
 /* list clubs */
 exports.clubs = function clubs(options) {
@@ -23,7 +25,7 @@ exports.clubs = function clubs(options) {
     var msg = req.weixin;
     if (msg.MsgType === 'text' && msg.Content.toLowerCase() === 'clubs') {
       request({
-        uri: options.url + '/clubs/',
+        uri: options.lfApi + '/clubs/',
         json: true
       }, function gotClub(err, httpResponse, body) {
         if (err) {
@@ -50,7 +52,7 @@ exports.checkIn = function checkIn(options) {
 
     if (msg.MsgType !== 'text') return next();
 
-    var match = new RegExp(/^checkin\s+(.*)\s+(.*)/i).exec(msg.Content);
+    var match = new RegExp(/^check in\s+(.*)\s+(.*)/i).exec(msg.Content);
     if (!match || match.length < 3) return next();
 
     var club = match[1];
@@ -63,12 +65,12 @@ exports.checkIn = function checkIn(options) {
             result.openid, result.nickname, result.headimgurl);
       var r = request({
         uri: util.format('%s/club/%s/event/%s/checkin',
-                         options.url, club, event),
+                         options.lfApi, club, event),
         json: true
       }, function checkedIn(err, httpResponse, body) {
         if (err) return next(err);
         debug('check in result: %s, msg: %s', body.result, body.msg);
-        res.reply('checkin ' + body.result);
+        res.reply('check in ' + body.result);
       });
       var form = r.form();
       form.append('name', result.nickname);

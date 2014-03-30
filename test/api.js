@@ -27,13 +27,13 @@ var wxApi = {
      openid: 'fake_open_id',
      nickname: 'fake_name',
      // TODO: fake image
-     headimgurl: 'http://localhost:' + lfApi.port + '/clubs/'
+     headimgurl: lfApi.url + '/clubs/'
    });
   }
 };
 
 var bot = require('..')({
-  url: lfApi.url,
+  lfApi: lfApi.url,
   wxApi: wxApi
 });
 
@@ -68,12 +68,12 @@ describe('letsface api', function () {
     var req = {
       weixin: {
         MsgType: 'text',
-        Content: 'checkin 1 2'
+        Content: 'check in 1 2'
       }
     };
     var res = {
       reply: function reply(result) {
-        expect(result).to.equal('checkin ok');
+        expect(result).to.equal('check in ok');
         done();
       }
     };
